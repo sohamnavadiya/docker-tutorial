@@ -1,0 +1,99 @@
+docker container run --publish 80:80 nginx
+docker container run --publish 80:80 --detach nginx
+docker container stop 690
+docker container ls
+docker container ls -a
+docker container run --publish 80:80 --detach --name webhost nginx
+docker container logs webhost
+docker container top webhost
+docker container rm 690 63f
+docker container rm -f 690 63f
+
+// specific version of nginx
+docker container run --publish 8080:80 --name webhost -d nginx:1.11 nginx -T
+
+docker container run --name mongo -d mongo
+docker start mongo
+docker ps
+docker top mongo
+
+//
+docker container run -d -p 3306:3306 --name db -e MYSQL_RANDOM_ROOT_PASSWORD=yes mysql
+docker container logs db
+docker container run -d --name webserver -p 8080:80 httpd
+docker ps
+docker container run -d --name proxy -p 80:80 nginx
+docker container ls
+curl localhost
+curl localhost:8080
+docker container stop <tab>
+docker container ls -a
+
+//
+docker container top
+docker container inspect mysql
+docker container stats
+
+//
+docker container run -it --name proxy nginx bash
+ls -al
+exit
+docker container ls -a
+docker container run -it --name ubuntu ubuntu
+docker container start -ai ubuntu
+docker containre exec -it mysql bash
+ps aux
+docker pull alphine
+docker image ls
+docker container run -it alphine bash
+docker container run -it alphine sh
+
+// docker networking
+docker container run -p 80:80 --name webhost -d nginx
+docker container port webhost
+docker container inspect --format '{{ .NetworkSettings.IPAddress }}' webhost
+ifconfig en0
+
+
+//
+docker network ls 
+docker network inspect bridge
+sudo docker network create my_app_net
+docker container run -d --name new_nginx --network my_app_net nginx
+docker network inspect my_app_net
+- attach a network to container
+docker network connect :netowrk :container
+- detach
+docker network disconnect :network :container
+
+--
+soham@soham:~$ sudo docker container ls
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+199f06991372        nginx               "nginx -g 'daemon of…"   5 minutes ago       Up 5 minutes        80/tcp              nginx
+48798e283b59        nginx               "nginx -g 'daemon of…"   31 minutes ago      Up 31 minutes       80/tcp              new_nginx
+soham@soham:~$ sudo docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+57b9bdac5c55        bridge              bridge              local
+5cb6837dc0e7        host                host                local
+88179080bc4e        local_default       bridge              local
+fe273e3bba04        my_app_net          bridge              local
+0aab581dbfe9        none                null                local
+soham@soham:~$ sudo docker network connect 199f06991372 fe273e3bba04
+Error response from daemon: No such container: fe273e3bba04
+soham@soham:~$ sudo docker network connect 199f06991372 48798e283b59
+Error response from daemon: network 199f06991372 not found
+soham@soham:~$ sudo docker network connect fe273e3bba04 199f06991372
+soham@soham:~$ 
+-----
+
+//
+docker container exec -it new_nginx ping my_nginx
+
+//
+docker container run -d --net dude --net-alias search elaticsearch:2
+docker container ls
+docker container run --rm --net dude alphine nslookup search
+
+docker container run --rm --net dude centos curl -s search:9200 
+
+
